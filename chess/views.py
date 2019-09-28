@@ -11,7 +11,7 @@ def index(request):
 
 def test(request):
     r = requests.get('http://httpbin.org/status/418')
-    return HttpResponse('<pre>' + r.text + '</pre>')
+    return HttpResponse('<pre>' + r.text + '</pre> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418">ERROR 418, I AM A TEAPOT</a>')
 
 def about(request):
     return render(request, "about.html")
