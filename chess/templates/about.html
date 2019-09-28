@@ -1,0 +1,24 @@
+{% block header %}
+{% include "base.html" with active="about"%}
+{% endblock %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="jumbotron text-center">
+
+
+  <div class="container">
+    <h1>About Us</h1>
+    <p>We haven't gotten this far yet. Have a cat!</p>
+    <a type="button" class="btn btn-lg btn-default" href="/test"> I'm a teapot</a>
+  </div>
+  
+  <img style="position: absolute; 
+              left: 0;
+              top: 0;
+              width: 100%;
+              opacity: 0.2;
+              z-index: -1;"
+    src="https://lh4.googleusercontent.com/-CqkH0VZYbKc/URjKukENvKI/AAAAAAAAAFI/uaDDr4TDzN4/s1600/628455_43294533.jpg"></img>
+</div>
+{% endblock %}

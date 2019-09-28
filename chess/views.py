@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from .models import Greeting
 import requests
+import os
 
 # Create your views here.
 def index(request):
@@ -11,6 +12,12 @@ def index(request):
 def test(request):
     r = requests.get('http://httpbin.org/status/418')
     return HttpResponse('<pre>' + r.text + '</pre>')
+
+def about(request):
+    return render(request, "about.html")
+
+def chesspng(request,piece):
+    return FileResponse(open("chess/static/chess/javascript/chessboardjs-1.0.0/img/chesspieces/wikipedia/"+piece+".png","rb"))
 
 
 def db(request):

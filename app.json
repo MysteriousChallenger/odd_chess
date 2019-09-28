@@ -1,8 +1,8 @@
 {
-  "name": "Start on Heroku: Python",
-  "description": "A barebones Python app, which can easily be deployed to Heroku.",
+  "name": "Odd Chess",
+  "description": "Odd Chess for ICS60 in F2019",
   "image": "heroku/python",
-  "repository": "https://github.com/heroku/python-getting-started",
+  "repository": "https://github.com/MysteriousChallenger/odd_chess/",
   "keywords": ["python", "django" ],
   "addons": [ "heroku-postgresql" ],
   "env": {

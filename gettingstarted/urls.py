@@ -4,7 +4,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-import hello.views
+import chess.views
 
 # To add a new path, first import the app:
 # import blog
@@ -14,9 +14,11 @@ import hello.views
 #
 # Learn more here: https://docs.djangoproject.com/en/2.1/topics/http/urls/
 
+
 urlpatterns = [
-    path("", hello.views.index, name="index"),
-    path("db/", hello.views.db, name="db"),
+    path("", chess.views.index, name="index"),
+    path("db/", chess.views.db, name="db"),
     path("admin/", admin.site.urls),
-    path("test/",hello.views.test, name="test")
+    path("img/chesspieces/wikipedia/<str:piece>.png",chess.views.chesspng),
+    path("about/",chess.views.about, name="about"),
 ]
