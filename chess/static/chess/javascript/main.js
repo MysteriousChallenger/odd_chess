@@ -39,10 +39,17 @@ function onDragStart(source, piece, position, orientation) {
     // do not pick up pieces if the game is over
     if (game.game_over()) return false
 
+    console.log(source, piece, position, orientation);
+
     // only pick up pieces for the side to move
     if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
         (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-        return false
+        return false;
+    }
+
+    // only pick up pieces that can move
+    if (game.moves({square: source}).length == 0){
+        return false;
     }
 }
 
@@ -132,9 +139,11 @@ function removeGreySquares() {
 function greySquare(square) {
     var $square = $('#myBoard .square-' + square)
 
-    var background = whiteSquareGrey
+    var background;
     if ($square.hasClass('black-3c85d')) {
         background = blackSquareGrey
+    } else {
+        background = whiteSquareGrey
     }
 
     $square.css('background', background)
