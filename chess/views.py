@@ -19,7 +19,6 @@ def about(request):
 def chesspng(request,piece):
     return FileResponse(open("chess/static/chess/javascript/chessboardjs-1.0.0/img/chesspieces/wikipedia/"+piece+".png","rb"))
 
-
 def db(request):
 
     greeting = Greeting()

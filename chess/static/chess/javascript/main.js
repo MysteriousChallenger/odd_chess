@@ -25,7 +25,7 @@ function pieceTheme(piece) {
 *    Author: Chris Oakman
 *    Date: 9/27/2019
 *    Code version: N/A
-*    Availability: https://chessboardjs.com/examples#5000
+*    Availability: https://chessboardjs.com/examples#5003
 *
 ***************************************************************************************/
 
@@ -57,7 +57,7 @@ function onDrop(source, target) {
     // illegal move
     if (move === null) return 'snapback'
 
-    updateStatus()
+    // updateStatus()
 }
 
 // update the board position after the piece snap
@@ -66,37 +66,78 @@ function onSnapEnd() {
     board.position(game.fen())
 }
 
-function updateStatus() {
-    var status = ''
+// function updateStatus() {
+//     var status = ''
 
-    var moveColor = 'White'
-    if (game.turn() === 'b') {
-        moveColor = 'Black'
+//     var moveColor = 'White'
+//     if (game.turn() === 'b') {
+//         moveColor = 'Black'
+//     }
+
+//     // checkmate?
+//     if (game.in_checkmate()) {
+//         status = 'Game over, ' + moveColor + ' is in checkmate.'
+//     }
+
+//     // draw?
+//     else if (game.in_draw()) {
+//         status = 'Game over, drawn position'
+//     }
+
+//     // game still on
+//     else {
+//         status = moveColor + ' to move'
+
+//         // check?
+//         if (game.in_check()) {
+//             status += ', ' + moveColor + ' is in check'
+//         }
+//     }
+
+//     $status.html(status)
+//     $fen.html(game.fen())
+//     $pgn.html(game.pgn())
+// }
+
+function onMouseoverSquare(square, piece) {
+    // get list of possible moves for this square
+    var moves = game.moves({
+        square: square,
+        verbose: true
+    })
+
+    // exit if there are no moves available for this square
+    if (moves.length === 0) return
+
+    // highlight the square they moused over
+    greySquare(square)
+
+    // highlight the possible squares for this piece
+    for (var i = 0; i < moves.length; i++) {
+        greySquare(moves[i].to)
+    }
+}
+
+function onMouseoutSquare(square, piece) {
+    removeGreySquares()
+}
+
+var whiteSquareGrey = '#a9a9a9'
+var blackSquareGrey = '#696969'
+
+function removeGreySquares() {
+    $('#myBoard .square-55d63').css('background', '')
+}
+
+function greySquare(square) {
+    var $square = $('#myBoard .square-' + square)
+
+    var background = whiteSquareGrey
+    if ($square.hasClass('black-3c85d')) {
+        background = blackSquareGrey
     }
 
-    // checkmate?
-    if (game.in_checkmate()) {
-        status = 'Game over, ' + moveColor + ' is in checkmate.'
-    }
-
-    // draw?
-    else if (game.in_draw()) {
-        status = 'Game over, drawn position'
-    }
-
-    // game still on
-    else {
-        status = moveColor + ' to move'
-
-        // check?
-        if (game.in_check()) {
-            status += ', ' + moveColor + ' is in check'
-        }
-    }
-
-    $status.html(status)
-    $fen.html(game.fen())
-    $pgn.html(game.pgn())
+    $square.css('background', background)
 }
 
 var config = {
@@ -105,6 +146,8 @@ var config = {
     onDragStart: onDragStart,
     onDrop: onDrop,
     onSnapEnd: onSnapEnd,
+    onMouseoutSquare: onMouseoutSquare,
+    onMouseoverSquare: onMouseoverSquare,
     // pieceTheme: pieceTheme,
 }
 
