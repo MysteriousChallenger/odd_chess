@@ -5,7 +5,7 @@ import requests
 import os
 
 # Create your views here.
-def index(request):
+def index(request,game = -1):
     # return HttpResponse('Hello from Python!')
     return render(request, "index.html")
 
