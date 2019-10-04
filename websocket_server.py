@@ -207,7 +207,7 @@ def launch_server():
         print("launching websocket server")
         asyncio.set_event_loop(asyncio.new_event_loop())
         server = websockets.serve(
-            connection_handler, host="localhost", port=int(os.environ.get("PORT", 5000)))
+            connection_handler, host="localhost", port=int(os.environ.get("PORT", 80)))
         asyncio.get_event_loop().run_until_complete(server)
         asyncio.get_event_loop().run_forever()
     t = Thread(target=startscript)
