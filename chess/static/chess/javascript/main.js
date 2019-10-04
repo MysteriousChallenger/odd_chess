@@ -174,6 +174,7 @@ var game_id = null
 var game_started = false
 var socket
 var game_mode
+var lastalert
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -183,61 +184,111 @@ window.onload = function () {
     board = Chessboard('myBoard', config)
     board.resize()
 
-    socket = new WebSocket("ws://" + window.location.hostname + "/websockets/game")
+    $(document).ready(function (e) {
+        socket = new WebSocket("ws://" + window.location.hostname + "/websockets/game")
 
-    socket.onopen = function (e) {
-        console.log("WebSocket opened on", "ws://" + window.location.hostname + "/websockets/game")
-        if (window.location.href.split("/").slice(-1)[0] != "") {
-            socket.send(JSON.stringify({ game_init: "private", game_id: Number(window.location.href.split("/").slice(-1)[0]) }))
-            game_started = true
-            game_mode = "private"
-        } else {
+        socket.onopen = function (e) {
+            console.log("WebSocket opened on", "ws://" + window.location.hostname + "/websockets/game")
+            if (window.location.href.split("/").slice(-1)[0] != "") {
+                socket.send(JSON.stringify({ game_init: "private", game_id: Number(window.location.href.split("/").slice(-1)[0]) }))
+                game_started = true
+                game_mode = "private"
+            } else {
+            }
         }
-    }
 
-    socket.onmessage = function (e) {
-        data = JSON.parse(e.data)
-        console.log(data)
-        if (data.msg_type == "game_init") {
-            if (data.result == 'success') {
-                game_id = data.game_id
-                window.history.replaceState('Object', 'Title', '/' + data.game_id);
-                if (data.is_player) {
-                    if (game_mode == "random"){
-                        document.getElementById("ModalTitle").innerHTML = "Random Matchmaking"
-                        $("private_match_btn").attr("disabled","")
-                    }
-                    else if (game_mode == "private"){
-                        document.getElementById("ModalTitle").innerHTML = "Private Match"
-                        $("#random_matchmaking_btn").attr("disabled","")
+        socket.onmessage = function (e) {
+            data = JSON.parse(e.data)
+            console.log(data, e.data)
+            if (data.msg_type == "game_init") {
+                if (data.result == 'success') {
+                    game_id = data.game_id
+                    window.history.replaceState('Object', 'Title', '/' + data.game_id);
+                    if (data.is_player) {
+                        if (game_mode == "random") {
+                            document.getElementById("ModalTitle").innerHTML = "Random Matchmaking"
+                            $("private_match_btn").attr("disabled", "")
+                        }
+                        else if (game_mode == "private") {
+                            document.getElementById("ModalTitle").innerHTML = "Private Match"
+                            $("#random_matchmaking_btn").attr("disabled", "")
 
-                    }
-                    if (data.is_turn) {
+                        }
+                        movedata = JSON.parse(data.last_move)
+                        if (movedata.msg_type == "move") {
+                            game.load(movedata.current_state)
+                            var move = game.move({
+                                from: movedata.from,
+                                to: movedata.to,
+                                promotion: movedata.promotion // NOTE: always promote to a queen for example simplicity
+                            })
+                            board.position(game.fen())
+                        } else if (movedata.msg_type == "reset") {
+                            game = new Chess()
+                            board.position(game.fen())
+                        }
+                        if ((data.is_turn && !(game.turn() == "b")) || (!data.is_turn && game.turn() == "b")) {
 
+                        } else {
+                            board.flip()
+                        }
                     } else {
-                        board.flip()
+                        document.getElementById("ModalTitle").innerHTML = "Private Match - Spectating"
+                        $("#random_matchmaking_btn").attr("disabled", "")
+                        movedata = JSON.parse(data.last_move)
+                        if (movedata.msg_type == "move") {
+                            game.load(movedata.current_state)
+                            var move = game.move({
+                                from: movedata.from,
+                                to: movedata.to,
+                                promotion: movedata.promotion // NOTE: always promote to a queen for example simplicity
+                            })
+                            board.position(game.fen())
+                        } else if (movedata.msg_type == "reset") {
+                            game = new Chess()
+                            board.position(game.fen())
+                        }
                     }
                 } else {
-                    document.getElementById("ModalTitle").innerHTML = "Private Match - Spectating"
-                    $("#random_matchmaking_btn").attr("disabled","")
+                    game_started = false
+                    document.getElementById("ModalTitle").innerHTML = "Private Match - Game Not Found"
                 }
-            } else {
-                game_started = false
-                document.getElementById("ModalTitle").innerHTML = "Private Match - Game Not Found"
+            } else if (data.msg_type == "move") {
+                game.load(data.current_state)
+                var move = game.move({
+                    from: data.from,
+                    to: data.to,
+                    promotion: data.promotion // NOTE: always promote to a queen for example simplicity
+                })
+                board.position(game.fen())
+            } else if (data.msg_type == "reset") {
+                game = new Chess()
+                board.position(game.fen())
+            } else if (data.msg_type == "game_playercount_update"){
+                if (lastalert != null){
+                    clearTimeout(lastalert)
+                }
+                if (data.game_playercount >= 2){
+                    document.getElementById("alertcontainer").innerHTML = `  <div class="alert alert-success" role="alert">
+                                                        Opponent has joined the game
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                                        </div>
+                                                    `
+                } else{
+                    document.getElementById("alertcontainer").innerHTML  = `  <div class="alert alert-warning" role="alert">
+                                                        Opponent has left
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                                        </div>
+                                                    `
+                }
+                $("#alertcontainer").collapse("show")
+                lastalert = setTimeout(function(){$("#alertcontainer").collapse("hide")},2000)
             }
-        } else if (data.msg_type == "move") {
-            game.load(data.current_state)
-            var move = game.move({
-                from: data.from,
-                to: data.to,
-                promotion: data.promotion // NOTE: always promote to a queen for example simplicity
-            })
-            board.position(game.fen())
-        } else if (data.msg_type == "reset") {
-            game = new Chess()
-            board.position(game.fen())
-        }
-    };
+        };
+    })
+
 
 
     $(document).on('shown.bs.modal', function (e) { board.resize() })
@@ -246,7 +297,7 @@ window.onload = function () {
         $("#random_matchmaking_btn").on('click', function (e) {
             if (game_started == false) {
                 game_mode = "random"
-                $("#private_match_btn").attr("disabled","")
+                $("#private_match_btn").attr("disabled", "")
                 socket.send(JSON.stringify({ game_init: "random" }))
                 game_started = true
             }
@@ -254,7 +305,7 @@ window.onload = function () {
         $("#private_match_btn").on('click', function (e) {
             if (game_started == false) {
                 game_mode = "private"
-                $("#random_matchmaking_btn").attr("disabled","")
+                $("#random_matchmaking_btn").attr("disabled", "")
                 socket.send(JSON.stringify({ game_init: "private", game_id: -1 }))
                 game_started = true
             }
