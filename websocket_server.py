@@ -9,6 +9,7 @@ import bisect
 from types import SimpleNamespace
 import logging
 import random
+import os
 
 # this storage system isn't even close to efficient. Whatever
 
@@ -206,7 +207,7 @@ def launch_server():
         print("launching websocket server")
         asyncio.set_event_loop(asyncio.new_event_loop())
         server = websockets.serve(
-            connection_handler, host="localhost", port=80)
+            connection_handler, host="localhost", port=int(os.environ.get("PORT", 5000)))
         asyncio.get_event_loop().run_until_complete(server)
         asyncio.get_event_loop().run_forever()
     t = Thread(target=startscript)
