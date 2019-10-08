@@ -10,6 +10,7 @@ from types import SimpleNamespace
 import logging
 import random
 import os
+import ssl
 
 # this storage system isn't even close to efficient. Whatever
 
@@ -44,8 +45,8 @@ class Game:
         return self.id == other.id
 
     async def add_user(self, websocket, random_order = True):
-        self.playercount += 1
-        if self.playercount <= self.playermax:
+        if self.playercount < self.playermax:
+            self.playercount += 1
             if random_order == False:
                 for i in range(len(self.players)):
                     if self.players[i] == None:
