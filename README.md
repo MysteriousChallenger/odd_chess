@@ -16,4 +16,7 @@ Run it locally by:
 
 
 
-Warning: unfinished spaghetti inside 
+Warning: unfinished spaghetti inside   
+
+DEMO:  
+![Demo gif](demo.gif)
