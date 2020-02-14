@@ -96,7 +96,8 @@ def gen_uuid():
     current_time = time.time()
     return int(current_time * 2**math.frexp(current_time)[1]) % 10**12
 
-
+#THIS IS AWFUL. started small and somehow grew really really big
+#todo compartmentalize into smaller functions
 async def connection_handler(websocket, path):
     global next_open_game
     if path == "/websockets/game":  # manage games websockets
