@@ -3,9 +3,9 @@
 
 
 Run it locally by:
-- cloning this repository  
-- then activating the python env by running ".../odd_chess/pyenv/scripts/activate"  
-- then running the server with: "python manage.py runserver"  
+- cloning this repository
+- then activating the python env by running "<path_to_repo>\odd_chess\scripts\activate"  
+- then running the server with: "python <path_to_repo>\manage.py runserver"  
 - And make sure to keep localhost:8000 and localhost:80 free.
 
   
