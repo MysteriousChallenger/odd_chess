@@ -16,10 +16,12 @@ import chess.views
 
 
 urlpatterns = [
+    path("<int:game>", chess.views.index, name="index"),
     path("", chess.views.index, name="index"),
     path("db/", chess.views.db, name="db"),
     path("admin/", admin.site.urls),
     path("test/",chess.views.test),
     path("img/chesspieces/wikipedia/<str:piece>.png",chess.views.chesspng),
     path("about/",chess.views.about, name="about"),
+    #path("websockets/", include('chess.urls')),
 ]

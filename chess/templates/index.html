@@ -16,10 +16,47 @@
   <div class="alert alert-info text-center" role="alert">
     Free Demo:
   </div>
-  <div class="chess_container container">
-    <div id="myBoard" class="" style="width: 30%; margin-left: auto; margin-right: auto;"></div>
-  </div>
-  <!-- <div class="row">
+  <div>
+
+    <div id="chessgame_container">
+      <ul class=" pager">
+        <li>
+          <div class="btn-group">
+            <button class="btn btn-default" id="random_matchmaking_btn" type="button" data-toggle="modal"
+              data-target="#chess_container" aria-expanded="false" aria-controls="chess_container">
+              Random Matchmaking
+            </button>
+            <button class="btn btn-default" id="private_match_btn" type="button" data-toggle="modal"
+              data-target="#chess_container" aria-expanded="false" aria-controls="chess_container">
+              Copy Link / Private Match
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <div class="chess_container modal fade " id="chess_container" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="ModalTitle">Modal title</h4>
+            </div>
+            <div class="modal-body">
+              <div id="chessboard_container">
+                <div id="myBoard" class=""></div>
+              </div>
+              <div style = "height: 3.3em">
+                <div id = "alertcontainer" class = "collapse" >
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
     <div class="col-md-6">
       <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
       <ul>
@@ -51,16 +88,14 @@
       </ul>
     </div>
   </div> -->
-  <!-- <div class="alert alert-info text-center" role="alert">
+    <!-- <div class="alert alert-info text-center" role="alert">
     Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
   </div> -->
 
-  <link defer rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
-    integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
-  <script defer src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
-    integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
-    crossorigin="anonymous"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
-  <script defer src="{% static 'chess/javascript/main.js' %}"></script>
-</div>
-{% endblock %}
+    <link defer rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+      integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
+    <script defer src="{% static 'chess\javascript\chessboardjs-1.0.0\js\chessboard-1.0.0.min.js' %}"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+    <script defer src="{% static 'chess/javascript/main.js' %}"></script>
+  </div>
+  {% endblock %}
