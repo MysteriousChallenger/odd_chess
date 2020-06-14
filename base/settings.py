@@ -26,7 +26,7 @@ SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be us
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['odd-chess.appspot.com','127.0.0.1','35.222.58.210']
+ALLOWED_HOSTS = ['odd-chess.appspot.com','127.0.0.1','35.222.58.210','localhost']
 
 
 # Application definition
